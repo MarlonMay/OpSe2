@@ -18,10 +18,11 @@ public class BuergeraemterControl {
 	public void schreibeBuergeraemterInDatei(String typ) throws IOException {
 		try {
 			if("csv".equals(typ)) {
-				this.bamModel.schreibeBuergeraemterInCsvDatei(typ);
+				this.bamModel.schreibeBuergeraemterInCsvDatei();
 				this.bamView.zeigeInformationsfensterAn("Die Bürgerämter wurden gespeichert!");
 			} else { 
-				this.bamView.zeigeInformationsfensterAn("Noch nicht implementiert");
+				this.bamModel.schreibeBuergeraemterInTxtDatei();
+				this.bamView.zeigeInformationsfensterAn("Die Bürgerämter wurden gespeichert!");
 			}
 		} catch (IOException exc) {
 			this.bamView.zeigeFehlermeldungsfensterAn("IOException beim Speichern!");
