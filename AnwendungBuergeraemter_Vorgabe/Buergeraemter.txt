@@ -1,2 +1,15 @@
-Klaus;1.0;20.0;fuenf strasse;
-sexi
+Daten des Bürgeramts
+Name des Bürgeramts: hans
+Öffnungszeit des Bürgeramts: 1.0 - 2.0
+Straße und Hausnummer des Bürgeramts: wurst 20
+Dienstleistungen des Bürgeramts: nix
+Daten des Bürgeramts
+Name des Bürgeramts: zwei
+Öffnungszeit des Bürgeramts: 2.0 - 3.0
+Straße und Hausnummer des Bürgeramts: zwei 2
+Dienstleistungen des Bürgeramts: zweien
+Daten des Bürgeramts
+Name des Bürgeramts: hans
+Öffnungszeit des Bürgeramts: 1.0 - 2.0
+Straße und Hausnummer des Bürgeramts: straße 1
+Dienstleistungen des Bürgeramts: nixx

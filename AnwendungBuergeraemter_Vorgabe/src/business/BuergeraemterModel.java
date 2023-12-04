@@ -3,27 +3,47 @@ package business;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import factory.Creator;
-import factory.Product;
+import java.util.Vector;
+
 import factory.ConcreteCsvCreator;
 import factory.ConcreteTxtCreator;
+import factory.Creator;
+import factory.Product;
+import observers.Observable;
+import observers.Observer;
 
-
-public class BuergeraemterModel {
+public class BuergeraemterModel implements Observable {
 	private Buergeramt buergeramt;
+	private static BuergeraemterModel instance;
+	private Vector<Observer> observers;
 	
-
-	public void schreibeBuergeraemterInCsvDatei() throws IOException {
-	    Creator csvCreator = new ConcreteCsvCreator();
-	    Product prodi = csvCreator.factoryMethod();
-	    prodi.addBuergeramt(this.buergeramt);   
+	private BuergeraemterModel() {
+		this.observers = new Vector<Observer>();
 	}
 	
-	public void schreibeBuergeraemterInTxtDatei() throws IOException {
-        Creator txtCreator = new ConcreteTxtCreator();
-        txtCreator.factoryMethod().addBuergeramt(this.buergeramt);
-        
-    }
+	public static BuergeraemterModel getInstance() {
+		
+		if(instance == null) {
+			instance = new BuergeraemterModel();
+			return instance;
+		} 
+		return instance;
+	}
+	
+
+	public void schreibeBuergeraemterInCsvDatei(String typ) throws IOException {
+		Creator creator = new ConcreteCsvCreator();
+		Product product = creator.factoryMethod();
+		product.fuegeInDateiHinzu(this.buergeramt);
+		product.schliesseDatei();
+	}
+	
+	public void schreibeBuergeraemterInTxtDatei(String typ) throws IOException {
+		Creator creator = new ConcreteTxtCreator();
+		Product product = creator.factoryMethod();
+		product.fuegeInDateiHinzu(this.buergeramt);
+		product.schliesseDatei();
+	}
 	
 	public void setBuergeramt(Buergeramt buergeramt) {
 		this.buergeramt = buergeramt;
@@ -31,5 +51,27 @@ public class BuergeraemterModel {
 	
 	public Buergeramt getBuergeramt() {
 		return this.buergeramt;
+	}
+
+	@Override
+	public void addObserver(Observer obs) {
+		observers.addElement(obs);
+		
+	}
+
+	@Override
+	public void removeObserfer(Observer obs) {
+		observers.removeElement(obs);
+		
+	}
+
+	@Override
+	public void notifyObservers() {
+		for(Observer current: observers) {
+			current.update();
+		}
+		
 	}	
+	
+	
 }
