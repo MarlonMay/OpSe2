@@ -1,6 +1,7 @@
 package business;
 
 import java.io.BufferedWriter;
+import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Vector;
@@ -13,7 +14,8 @@ import observers.Observable;
 import observers.Observer;
 
 public class BuergeraemterModel implements Observable {
-	private Buergeramt buergeramt;
+	//private Buergeramt buergeramt;
+    private ArrayList<Buergeramt> buergeraemter = new ArrayList<Buergeramt>();
 	private static BuergeraemterModel instance;
 	private Vector<Observer> observers;
 	
@@ -22,7 +24,6 @@ public class BuergeraemterModel implements Observable {
 	}
 	
 	public static BuergeraemterModel getInstance() {
-		
 		if(instance == null) {
 			instance = new BuergeraemterModel();
 			return instance;
@@ -34,24 +35,39 @@ public class BuergeraemterModel implements Observable {
 	public void schreibeBuergeraemterInCsvDatei(String typ) throws IOException {
 		Creator creator = new ConcreteCsvCreator();
 		Product product = creator.factoryMethod();
-		product.fuegeInDateiHinzu(this.buergeramt);
+		for(Buergeramt current: this.buergeraemter) {
+		    product.fuegeInDateiHinzu(current);
+		}
+		//product.fuegeInDateiHinzu(this.buergeramt);
 		product.schliesseDatei();
 	}
 	
 	public void schreibeBuergeraemterInTxtDatei(String typ) throws IOException {
 		Creator creator = new ConcreteTxtCreator();
 		Product product = creator.factoryMethod();
-		product.fuegeInDateiHinzu(this.buergeramt);
+		for(Buergeramt current: this.buergeraemter) {
+            product.fuegeInDateiHinzu(current);
+        }
+		//product.fuegeInDateiHinzu(this.buergeramt);
 		product.schliesseDatei();
 	}
 	
+	/*
 	public void setBuergeramt(Buergeramt buergeramt) {
 		this.buergeramt = buergeramt;
+	}*/
+	public void setBuergeramt(Buergeramt buergeramt) {
+	    this.buergeraemter.add(buergeramt);
 	}
 	
+	/*
 	public Buergeramt getBuergeramt() {
 		return this.buergeramt;
-	}
+	}*/
+	
+	public ArrayList<Buergeramt> getBuergeraemter() {
+        return this.buergeraemter;
+    }
 
 	@Override
 	public void addObserver(Observer obs) {
