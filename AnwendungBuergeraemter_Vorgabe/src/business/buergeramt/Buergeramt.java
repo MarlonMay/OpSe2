@@ -1,4 +1,4 @@
-package business;
+package business.buergeramt;
 import java.util.ArrayList;
 
 public class Buergeramt {

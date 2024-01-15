@@ -1,7 +1,12 @@
 package gui.guiStaedtischeEinrichtungen;
-   
-import business.BuergeraemterModel;
-import business.Buergeramt;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import business.buergeramt.BuergeraemterModel;
+import business.buergeramt.Buergeramt;
+import business.sporthallen.Sporthalle;
+import business.sporthallen.SporthallenModel;
 import javafx.event.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,56 +17,84 @@ import javafx.stage.Stage;
 import ownUtil.*;
 
 public class StaedtischeEinrichtungenView {
-	
+
 	// Hier ergaenzen
-		private BuergeraemterModel buergeraemterModel;
-		
-    	//---Anfang Attribute der grafischen Oberflaeche---
-    	private Pane pane = new  Pane();
-    	private Label lblAnzeigeBuergeraemter     = new Label("Anzeige Bürgerämter");
-    	private TextArea txtAnzeigeBuergeraemter  = new TextArea();
-    	//private Button btnAnzeigeBuergeraemter = new Button("Anzeige");
-    	//-------Ende Attribute der grafischen Oberflaeche-------
-    
-    	public StaedtischeEinrichtungenView(StaedtischeEinrichtungenControl seControl, Stage primaryStage, BuergeraemterModel model){
-    		Scene scene = new Scene(this.pane, 560, 340);
-    		primaryStage.setScene(scene);
-    		primaryStage.setTitle("Anzeige von städtischen " 
- 			+ "Einrichtungen");
-    		primaryStage.show();
-    		// Hier ergaenzen
-    		this.buergeraemterModel = model;
-    		
+	private BuergeraemterModel buergeraemterModel;
+	private SporthallenModel sporthallenModel;
 
+	// ---Anfang Attribute der grafischen Oberflaeche---
+	private Pane pane = new Pane();
+	private Label lblAnzeigeBuergeraemter = new Label("Anzeige Bürgerämter");
+	private TextArea txtAnzeigeBuergeraemter = new TextArea();
+	// Sporthallen
+	private Label lblAnzeigeSporthallen = new Label("Anzeige Sporthallen");
+	private TextArea txtAnzeigeSporthallen = new TextArea();
+	private Button btnAnzeigeSporthallen = new Button("CSV Import und Anzeige");
+	// -------Ende Attribute der grafischen Oberflaeche-------
 
-		this.initKomponenten();
-		//this.initListener();
-    	}
+	public StaedtischeEinrichtungenView(StaedtischeEinrichtungenControl seControl, Stage primaryStage,
+			BuergeraemterModel model, SporthallenModel shModel) {
+		Scene scene = new Scene(this.pane, 560, 340);
+		primaryStage.setScene(scene);
+		primaryStage.setTitle("Anzeige von städtischen Einrichtungen und Sporthallen");
+		primaryStage.show();
+		// Hier ergaenzen
+		this.buergeraemterModel = model;
+		this.sporthallenModel = shModel;
+		this.initKomponentenBuergeramt();
+		this.initKomponentenSporthalle();
+		this.initListener();
+	}
 
-    	private void initKomponenten(){
-    		// Label
- 		Font font = new Font("Arial", 20);
-       	lblAnzeigeBuergeraemter.setLayoutX(310);
-    		lblAnzeigeBuergeraemter.setLayoutY(40);
-    		lblAnzeigeBuergeraemter.setFont(font);
-    		lblAnzeigeBuergeraemter.setStyle("-fx-font-weight: bold;"); 
-       	pane.getChildren().add(lblAnzeigeBuergeraemter);    
-        	
+	private void initKomponentenBuergeramt() {
+		// Label
+		Font font = new Font("Arial", 20);
+		lblAnzeigeBuergeraemter.setLayoutX(310);
+		lblAnzeigeBuergeraemter.setLayoutY(40);
+		lblAnzeigeBuergeraemter.setFont(font);
+		lblAnzeigeBuergeraemter.setStyle("-fx-font-weight: bold;");
+		pane.getChildren().add(lblAnzeigeBuergeraemter);
 
+		txtAnzeigeBuergeraemter.setEditable(false);
+		txtAnzeigeBuergeraemter.setLayoutX(310);
+		txtAnzeigeBuergeraemter.setLayoutY(90);
+		txtAnzeigeBuergeraemter.setPrefWidth(220);
+		txtAnzeigeBuergeraemter.setPrefHeight(185);
+		pane.getChildren().add(txtAnzeigeBuergeraemter);
 
-// Textbereich	
-        	txtAnzeigeBuergeraemter.setEditable(false);
-     		txtAnzeigeBuergeraemter.setLayoutX(310);
-    		txtAnzeigeBuergeraemter.setLayoutY(90);
-     		txtAnzeigeBuergeraemter.setPrefWidth(220);
-    		txtAnzeigeBuergeraemter.setPrefHeight(185);
-       	pane.getChildren().add(txtAnzeigeBuergeraemter);        	
-        	// Button
-//          	btnAnzeigeBuergeraemter.setLayoutX(310);
-//        	btnAnzeigeBuergeraemter.setLayoutY(290);
-//        	pane.getChildren().add(btnAnzeigeBuergeraemter); 
-   }
-   
+	}
+
+	private void initKomponentenSporthalle() {
+		Font font = new Font("Arial", 20);
+		lblAnzeigeSporthallen.setLayoutX(50);
+		lblAnzeigeSporthallen.setLayoutY(40);
+		lblAnzeigeSporthallen.setFont(font);
+		lblAnzeigeSporthallen.setStyle("-fx-font-weight: bold;");
+		pane.getChildren().add(lblAnzeigeSporthallen);
+
+		txtAnzeigeSporthallen.setEditable(false);
+		txtAnzeigeSporthallen.setLayoutX(50);
+		txtAnzeigeSporthallen.setLayoutY(90);
+		txtAnzeigeSporthallen.setPrefWidth(220);
+		txtAnzeigeSporthallen.setPrefHeight(185);
+		pane.getChildren().add(txtAnzeigeSporthallen);
+
+		btnAnzeigeSporthallen.setLayoutX(50);
+		btnAnzeigeSporthallen.setLayoutY(290);
+		pane.getChildren().add(btnAnzeigeSporthallen);
+	}
+
+	private void initListener() {
+		btnAnzeigeSporthallen.setOnAction(e -> {
+			try {
+				this.sporthallenModel.leseSporthallenAusCsvDatei();
+				zeigeSporthallenAn();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		});
+	}
+
 //   private void initListener() {
 //	    btnAnzeigeBuergeraemter.setOnAction(
 // 			new EventHandler<ActionEvent>() {
@@ -72,25 +105,28 @@ public class StaedtischeEinrichtungenView {
 //	        	} 
 //   	    });
 //    }
-   
-    public void zeigeBuergeraemterAn(){
-    		if(buergeraemterModel.getBuergeraemter() != null){
-    		    String txt = "";
-    		    for(Buergeramt current: buergeraemterModel.getBuergeraemter()) {
-    		        txt += current.gibBuergeramtZurueck(' ');
-    		    }
-    			txtAnzeigeBuergeraemter.setText(txt);
-    		}
-    		else{
-    			zeigeInformationsfensterAn(
- 				"Bisher wurde kein Bürgeramt aufgenommen!");
-    		}
-    }	
-   
-    private void zeigeInformationsfensterAn(String meldung){
-    	  	new MeldungsfensterAnzeiger(AlertType.INFORMATION,
-               	"Information", meldung).zeigeMeldungsfensterAn();
-    }	
-    
-}
 
+	public void zeigeBuergeraemterAn() {
+		if (buergeraemterModel.getBuergeraemter() != null) {
+			String txt = "";
+			for (Buergeramt current : buergeraemterModel.getBuergeraemter()) {
+				txt += current.gibBuergeramtZurueck(' ');
+			}
+			txtAnzeigeBuergeraemter.setText(txt);
+		} else {
+			zeigeInformationsfensterAn("Bisher wurde kein Bürgeramt aufgenommen!");
+		}
+	}
+
+	public void zeigeSporthallenAn() {
+		String output = "";
+		for (Sporthalle current : this.sporthallenModel.getSporthallen()) {
+			output += current + "\n";
+		}
+		txtAnzeigeSporthallen.setText(output);
+	}
+
+	private void zeigeInformationsfensterAn(String meldung) {
+		new MeldungsfensterAnzeiger(AlertType.INFORMATION, "Information", meldung).zeigeMeldungsfensterAn();
+	}
+}

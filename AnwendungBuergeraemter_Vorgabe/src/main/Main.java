@@ -1,6 +1,9 @@
 package main;
 
 
+import java.io.IOException;
+
+import business.sporthallen.SporthallenModel;
 import gui.guiBuergeraemter.BuergeraemterControl;
 import gui.guiStaedtischeEinrichtungen.StaedtischeEinrichtungenControl;
 import javafx.application.Application;
@@ -12,8 +15,8 @@ public class Main extends Application {
 	
 	public static void main(String[] args){
 		launch(args);
+
 	}
-	
 	@Override
 	public void start(Stage primaryStage) {
 		new BuergeraemterControl(primaryStage);

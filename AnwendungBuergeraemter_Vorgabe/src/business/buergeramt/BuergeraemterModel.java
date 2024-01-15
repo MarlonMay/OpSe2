@@ -1,8 +1,8 @@
-package business;
+package business.buergeramt;
 
-import java.io.BufferedWriter;
+
 import java.util.ArrayList;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.util.Vector;
 
@@ -14,7 +14,7 @@ import observers.Observable;
 import observers.Observer;
 
 public class BuergeraemterModel implements Observable {
-	//private Buergeramt buergeramt;
+	
     private ArrayList<Buergeramt> buergeraemter = new ArrayList<Buergeramt>();
 	private static BuergeraemterModel instance;
 	private Vector<Observer> observers;
@@ -30,7 +30,6 @@ public class BuergeraemterModel implements Observable {
 		} 
 		return instance;
 	}
-	
 
 	public void schreibeBuergeraemterInCsvDatei(String typ) throws IOException {
 		Creator creator = new ConcreteCsvCreator();
@@ -38,7 +37,6 @@ public class BuergeraemterModel implements Observable {
 		for(Buergeramt current: this.buergeraemter) {
 		    product.fuegeInDateiHinzu(current);
 		}
-		//product.fuegeInDateiHinzu(this.buergeramt);
 		product.schliesseDatei();
 	}
 	
@@ -47,23 +45,13 @@ public class BuergeraemterModel implements Observable {
 		Product product = creator.factoryMethod();
 		for(Buergeramt current: this.buergeraemter) {
             product.fuegeInDateiHinzu(current);
-        }
-		//product.fuegeInDateiHinzu(this.buergeramt);
+        }	
 		product.schliesseDatei();
 	}
 	
-	/*
-	public void setBuergeramt(Buergeramt buergeramt) {
-		this.buergeramt = buergeramt;
-	}*/
 	public void setBuergeramt(Buergeramt buergeramt) {
 	    this.buergeraemter.add(buergeramt);
 	}
-	
-	/*
-	public Buergeramt getBuergeramt() {
-		return this.buergeramt;
-	}*/
 	
 	public ArrayList<Buergeramt> getBuergeraemter() {
         return this.buergeraemter;
@@ -72,22 +60,17 @@ public class BuergeraemterModel implements Observable {
 	@Override
 	public void addObserver(Observer obs) {
 		observers.addElement(obs);
-		
 	}
 
 	@Override
 	public void removeObserfer(Observer obs) {
-		observers.removeElement(obs);
-		
+		observers.removeElement(obs);	
 	}
 
 	@Override
 	public void notifyObservers() {
 		for(Observer current: observers) {
 			current.update();
-		}
-		
+		}	
 	}	
-	
-	
 }
